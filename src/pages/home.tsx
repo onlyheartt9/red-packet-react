@@ -1,7 +1,15 @@
-import Image from 'next/image'
+import Image from "next/image";
+import { useAccount, useConnect, useNetwork } from "wagmi";
 
 export default function Home() {
+  const aaa = useAccount();
+  const bbb = useConnect();
+  const ccc = useNetwork();
+  console.log(aaa, bbb, ccc);
   return (
-    <div>Home</div>
-  )
+    <div>
+      <div>description</div>
+      <div>red pockets</div>
+    </div>
+  );
 }

@@ -3,7 +3,11 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 function Layout({ children }) {
   return (
     <div>
-      <header>
+      <header className="flex justify-between mx-8 my-4 bg-gradient-to-r from-sky-500  rounded-lg px-8 py-4">
+        <h1 className="text-4xl text-red-400 text-center font-semibold">
+          RED-POKECT
+        </h1>
+
         {/* 放置全局头部内容 */}
         <ConnectButton></ConnectButton>
       </header>
