@@ -16,6 +16,17 @@
   }
 }
 
+@font-face {
+  font-family: 'din';
+  src: url('/public/font/DIN\ Alternate\ Black.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'din', sans-serif;
+}
+
 /* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
