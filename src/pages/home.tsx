@@ -1,3 +1,4 @@
+import { Button } from "@nextui-org/react";
 import Image from "next/image";
 import { useAccount, useConnect, useNetwork } from "wagmi";
 
@@ -8,6 +9,7 @@ export default function Home() {
   console.log(aaa, bbb, ccc);
   return (
     <div>
+      <Button>xxxx</Button>
       <div>description</div>
       <div>red pockets</div>
     </div>
