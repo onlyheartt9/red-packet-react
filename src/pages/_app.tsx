@@ -8,6 +8,11 @@ import { collectChains } from "@/contants/chains";
 import { GlobalStore } from "@/store/global.store";
 import { Provider } from "reto";
 
+import localFont from 'next/font/local';
+import { NextUIProvider } from "@nextui-org/react";
+const myFont = localFont({ src: '../public/font/DIN Alternate Black.ttf'})
+//console.log(myFont);
+
 const { chains, publicClient } = configureChains(collectChains, [
   publicProvider(),
 ]);
@@ -27,15 +32,17 @@ const wagmiConfig = createConfig({
 });
 function MyApp({ Component, pageProps }) {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <Provider of={GlobalStore}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Provider>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <NextUIProvider>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider chains={chains}>
+          <Provider of={GlobalStore}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Provider>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </NextUIProvider>
   );
 }
 
