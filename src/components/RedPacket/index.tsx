@@ -35,7 +35,7 @@ const StateCompoents = ({ status: statusType }) => {
   const publicClass = {
     Background: "w-20 p-1 px-2  bg-zinc-100/40 rounded-full flex flex-row",
     Status_Ball: "w-2 h-2 self-center rounded-full",
-    Text: "basis-3/4 text-white/50 text-sm font-normal",
+    Text: "basis-3/4 text-white/50 h-4 align-middle font-normal",
   };
   const ConfigClass = {
     Ball_Color: {
@@ -78,7 +78,7 @@ const mockData : packetType = {
 };
 
 function RedPacket({ isOpen, onOpenChange }: RedPacketProps) {
-  const status: statusType = "In_Progress";
+  const status: statusType = 'In_Progress';
 
   const Message = [
     {id: 1, title:'参与次数', current: mockData.currentTimes , total: mockData.times  },
@@ -88,10 +88,10 @@ function RedPacket({ isOpen, onOpenChange }: RedPacketProps) {
   return (
     <>
       <div
-        className="h-[492pt] w-[332pt] rounded-[60pt]  bg-auto bg-center transition-all hover:scale-105"
+        className="h-[490px] w-[330px] rounded-[60px]  bg-cover bg-center transition-all hover:scale-105 "
         style={{ backgroundImage: "url(/img/packet-bgd.png)" }}
       >
-        <Button className="h-full w-full flex p-24 flex-col">
+        <Button className="h-full w-full flex flex-col bg-transparent items-start px-16 pb-40" disableRipple disableAnimation>
           <StateCompoents status={status} />
           <div className=" flex flex-col mt-14">
             {Message.map((item) => (
@@ -104,12 +104,12 @@ function RedPacket({ isOpen, onOpenChange }: RedPacketProps) {
             ))}
           </div>
         </Button>
-      </div>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}  className="bg-red-50">
-        <ModalContent>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange} >
+        { status === 'Not_Participated' &&
+        (<ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader>xxxxx</ModalHeader>
+              <ModalHeader>您未参与这个红包活动</ModalHeader>
               <ModalBody>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -118,17 +118,32 @@ function RedPacket({ isOpen, onOpenChange }: RedPacketProps) {
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" onPress={onClose}>
-                  再考虑考虑
-                </Button>
-                <Button color="danger" onPress={onClose}>
-                  参与
+                <Button className="bg-[#FE3F21] text-white" onPress={onClose}>
+                  参与活动
                 </Button>
               </ModalFooter>
             </>
           )}
-        </ModalContent>
+        </ModalContent>)} 
+        { status !== "Not_Participated" && (<ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>红包详情</ModalHeader>
+              <ModalBody>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam pulvinar risus non risus hendrerit venenatis.
+                  Pellentesque sit amet hendrerit risus, sed porttitor quam.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>)}
       </Modal>
+      </div>
+      
     </>
   );
 }

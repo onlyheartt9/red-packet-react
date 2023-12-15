@@ -7,11 +7,8 @@ import { publicProvider } from "wagmi/providers/public";
 import { collectChains } from "@/contants/chains";
 import { GlobalStore } from "@/store/global.store";
 import { Provider } from "reto";
-
-import localFont from 'next/font/local';
 import { NextUIProvider } from "@nextui-org/react";
-const myFont = localFont({ src: '../public/font/DIN Alternate Black.ttf'})
-//console.log(myFont);
+
 
 const { chains, publicClient } = configureChains(collectChains, [
   publicProvider(),
@@ -42,7 +39,7 @@ function MyApp({ Component, pageProps }) {
           </Provider>
         </RainbowKitProvider>
       </WagmiConfig>
-    </NextUIProvider>
+      </NextUIProvider>
   );
 }
 

@@ -18,7 +18,7 @@
 
 @font-face {
   font-family: 'din';
-  src: url('/public/font/DIN\ Alternate\ Black.ttf') format('truetype');
+  src: url('../public/font/din.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
