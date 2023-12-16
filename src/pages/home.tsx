@@ -8,12 +8,10 @@ export default function Home() {
   const bbb = useConnect();
   const ccc = useNetwork();
   console.log(aaa, bbb, ccc);
-  const [isOpen, onOpenChange] = useState(true);
   return (
     <div>
       <div>description</div>
       <div>red pockets</div>
-      <RedPacket isOpen={isOpen} onOpenChange={onOpenChange}/>
     </div>
   );
 }
