@@ -1,14 +1,17 @@
 import "../styles/globals.css"; // 导入全局样式
 import "@rainbow-me/rainbowkit/styles.css";
 import Layout from "../components/Layout";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  darkTheme,
+  getDefaultWallets,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { collectChains } from "@/contants/chains";
 import { GlobalStore } from "@/store/global.store";
 import { Provider } from "reto";
 import { NextUIProvider } from "@nextui-org/react";
-
 
 const { chains, publicClient } = configureChains(collectChains, [
   publicProvider(),
@@ -20,7 +23,6 @@ const { connectors } = getDefaultWallets({
   chains,
 });
 
-console.log(chains);
 
 const wagmiConfig = createConfig({
   autoConnect: true,
@@ -28,10 +30,20 @@ const wagmiConfig = createConfig({
   publicClient,
 });
 function MyApp({ Component, pageProps }) {
+  // if(!!window){
+  //   window.fff =wagmiConfig;
+  // }
   return (
     <NextUIProvider>
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider
+          chains={chains}
+          theme={darkTheme({
+            accentColor: "#7b3fe4",
+            accentColorForeground: "white",
+            borderRadius: "medium",
+          })}
+        >
           <Provider of={GlobalStore}>
             <Layout>
               <Component {...pageProps} />
@@ -39,7 +51,7 @@ function MyApp({ Component, pageProps }) {
           </Provider>
         </RainbowKitProvider>
       </WagmiConfig>
-      </NextUIProvider>
+    </NextUIProvider>
   );
 }
 
