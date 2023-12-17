@@ -172,6 +172,32 @@ export const redPacketAbi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "packetId",
+        type: "uint256",
+      },
+    ],
+    name: "attendPacketSuccess",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "packetId",
+        type: "uint256",
+      },
+    ],
+    name: "createPacketSuccess",
+    type: "event",
+  },
+  {
     inputs: [],
     name: "_owner",
     outputs: [{ internalType: "address", name: "", type: "address" }],
@@ -190,6 +216,13 @@ export const redPacketAbi = [
     name: "addDeposit",
     outputs: [{ internalType: "uint256", name: "deposit", type: "uint256" }],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "allPacketIds",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -236,6 +269,34 @@ export const redPacketAbi = [
   },
   {
     inputs: [],
+    name: "getAllPackets",
+    outputs: [
+      {
+        components: [
+          { internalType: "uint256", name: "id", type: "uint256" },
+          { internalType: "uint256", name: "startTime", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
+          { internalType: "string", name: "collectType", type: "string" },
+          { internalType: "bool", name: "lock", type: "bool" },
+          { internalType: "uint8", name: "currentTimes", type: "uint8" },
+          { internalType: "uint8", name: "times", type: "uint8" },
+          { internalType: "uint32", name: "limit", type: "uint32" },
+          { internalType: "address[]", name: "users", type: "address[]" },
+          { internalType: "address", name: "creator", type: "address" },
+          { internalType: "address", name: "currentUser", type: "address" },
+          { internalType: "bool", name: "exist", type: "bool" },
+          { internalType: "uint256", name: "requestId", type: "uint256" },
+        ],
+        internalType: "struct RedPacket.Packet[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "getBalance",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
@@ -245,16 +306,6 @@ export const redPacketAbi = [
     inputs: [],
     name: "getContractBalance",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256[]", name: "_randomWords", type: "uint256[]" },
-      { internalType: "uint256", name: "_amount", type: "uint256" },
-    ],
-    name: "getCountByPercent",
-    outputs: [{ internalType: "uint256[]", name: "", type: "uint256[]" }],
     stateMutability: "view",
     type: "function",
   },
@@ -294,6 +345,34 @@ export const redPacketAbi = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "uint256[]", name: "_ids", type: "uint256[]" }],
+    name: "getPackets",
+    outputs: [
+      {
+        components: [
+          { internalType: "uint256", name: "id", type: "uint256" },
+          { internalType: "uint256", name: "startTime", type: "uint256" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
+          { internalType: "string", name: "collectType", type: "string" },
+          { internalType: "bool", name: "lock", type: "bool" },
+          { internalType: "uint8", name: "currentTimes", type: "uint8" },
+          { internalType: "uint8", name: "times", type: "uint8" },
+          { internalType: "uint32", name: "limit", type: "uint32" },
+          { internalType: "address[]", name: "users", type: "address[]" },
+          { internalType: "address", name: "creator", type: "address" },
+          { internalType: "address", name: "currentUser", type: "address" },
+          { internalType: "bool", name: "exist", type: "bool" },
+          { internalType: "uint256", name: "requestId", type: "uint256" },
+        ],
+        internalType: "struct RedPacket.Packet[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "uint256", name: "_requestId", type: "uint256" }],
     name: "getRequestStatus",
     outputs: [
@@ -305,8 +384,22 @@ export const redPacketAbi = [
   },
   {
     inputs: [],
-    name: "lastRequestId",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "getUser",
+    outputs: [
+      {
+        components: [
+          { internalType: "uint256", name: "deposit", type: "uint256" },
+          { internalType: "bool", name: "lock", type: "bool" },
+          { internalType: "bool", name: "active", type: "bool" },
+          { internalType: "bool", name: "exist", type: "bool" },
+          { internalType: "uint256", name: "packetId", type: "uint256" },
+          { internalType: "uint256[]", name: "packetIds", type: "uint256[]" },
+        ],
+        internalType: "struct RedPacket.User",
+        name: "",
+        type: "tuple",
+      },
+    ],
     stateMutability: "view",
     type: "function",
   },
@@ -318,6 +411,26 @@ export const redPacketAbi = [
     type: "function",
   },
   {
+    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    name: "packetMap",
+    outputs: [
+      { internalType: "uint256", name: "id", type: "uint256" },
+      { internalType: "uint256", name: "startTime", type: "uint256" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "string", name: "collectType", type: "string" },
+      { internalType: "bool", name: "lock", type: "bool" },
+      { internalType: "uint8", name: "currentTimes", type: "uint8" },
+      { internalType: "uint8", name: "times", type: "uint8" },
+      { internalType: "uint32", name: "limit", type: "uint32" },
+      { internalType: "address", name: "creator", type: "address" },
+      { internalType: "address", name: "currentUser", type: "address" },
+      { internalType: "bool", name: "exist", type: "bool" },
+      { internalType: "uint256", name: "requestId", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       { internalType: "uint256", name: "requestId", type: "uint256" },
       { internalType: "uint256[]", name: "randomWords", type: "uint256[]" },
@@ -325,13 +438,6 @@ export const redPacketAbi = [
     name: "rawFulfillRandomWords",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "requestIds",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -348,6 +454,13 @@ export const redPacketAbi = [
       { internalType: "bool", name: "fulfilled", type: "bool" },
       { internalType: "bool", name: "exists", type: "bool" },
     ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "s_subscriptionId",
+    outputs: [{ internalType: "uint64", name: "", type: "uint64" }],
     stateMutability: "view",
     type: "function",
   },

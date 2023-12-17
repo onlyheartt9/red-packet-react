@@ -30,7 +30,8 @@ body {
   min-width: 1000px;
 }
 html {
-  height: 100%;
+  height: fit-content;
+  min-height: 100%;
 }
 
 /* body {

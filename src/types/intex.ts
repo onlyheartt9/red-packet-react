@@ -1,4 +1,4 @@
-export type RedPacketClass = {
+export type RedPacketType = {
   id: number; // id
   startTime: number; // 发起红包时间
   amount: number; // 单个红包金额
@@ -12,4 +12,8 @@ export type RedPacketClass = {
   currentUser: string; // 当前需要发红包的人
   exist: boolean; // 是否存在
   requestId: number; // 随机数映射id，方便vrf回调
+};
+
+export type ClassProps = {
+  className?: string;
 };

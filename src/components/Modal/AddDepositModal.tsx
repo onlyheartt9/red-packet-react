@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Modal,
   ModalContent,
@@ -7,41 +7,19 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
 } from "@nextui-org/react";
 import { RED_PACKET_ADDRESS } from "@/server/redPacketServer";
 import { ethers } from "ethers";
 import { useLinkApprove } from "@/server/linkServer";
 import { Provider, useStore } from "reto";
 import { AddDepositModalStore } from "@/store/addDepositModal.store";
+import VaildInput from "../ValidInput";
+import { ClassProps } from "@/types/intex";
 
-type AddDepositModal = {
-  className?: string;
-};
-
-// 验证相关逻辑
-const useInvalid = ({ value, first }) => {
-  const [errorMessage, setErrorMessage] = useState("");
-  const validateEmail = () => {
-    if (value > 0) {
-      return true;
-    } else {
-      setErrorMessage("金额不可为0");
-      return false;
-    }
-  };
-
-  const isInvalid = React.useMemo(() => {
-    if (first) return false;
-
-    return validateEmail() ? false : true;
-  }, [value]);
-
-  return { errorMessage, isInvalid };
-};
+type AddDepositModalProps = {} & ClassProps;
 
 // 授权相关逻辑
-const useOk = ({ value, isInvalid }) => {
+const useOk = ({ value, ref }) => {
   const { setApprovalTx, setDepositLoading, setStep } =
     useStore(AddDepositModalStore);
   const { write: writeApprove, data } = useLinkApprove({
@@ -52,7 +30,7 @@ const useOk = ({ value, isInvalid }) => {
   });
 
   const onOk = () => {
-    if (isInvalid) {
+    if (!ref?.current?.validate()) {
       return;
     }
     writeApprove({
@@ -67,7 +45,7 @@ const useOk = ({ value, isInvalid }) => {
   return { onOk };
 };
 
-const AddDepositModal = ({ className }: AddDepositModal) => {
+const AddDepositModal = ({ className }: AddDepositModalProps) => {
   const {
     value,
     setValue,
@@ -77,15 +55,11 @@ const AddDepositModal = ({ className }: AddDepositModal) => {
     step,
     setStep,
   } = useStore(AddDepositModalStore);
-  const [first, setFirst] = useState(true);
+  const ref = useRef<any>();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { errorMessage, isInvalid } = useInvalid({ value, first });
-  const { onOk } = useOk({ value, isInvalid });
+  const { onOk } = useOk({ value, ref });
 
   const onChange = (e) => {
-    if (first) {
-      setFirst(false);
-    }
     setValue(e.target.value);
   };
 
@@ -107,18 +81,24 @@ const AddDepositModal = ({ className }: AddDepositModal) => {
                     授权
                   </ModalHeader>
                   <ModalBody className="flex flex-col">
-                    <Input
+                    <VaildInput
+                      ref={ref}
                       type="number"
                       label="Price"
                       min={0}
                       size="lg"
                       placeholder="0.00"
                       labelPlacement="outside"
-                      isInvalid={isInvalid}
-                      errorMessage={isInvalid && errorMessage}
                       value={value}
                       onChange={onChange}
-                    />
+                      validate={(val) => {
+                        if (val > 0) {
+                          return true;
+                        } else {
+                          return "金额不可为0";
+                        }
+                      }}
+                    ></VaildInput>
                   </ModalBody>
                   <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
@@ -126,6 +106,9 @@ const AddDepositModal = ({ className }: AddDepositModal) => {
                     </Button>
                     <Button
                       onPress={() => {
+                        if (!ref?.current.validate()) {
+                          return;
+                        }
                         setStep("deposit");
                         setDepositLoading(true);
                         onOk();
@@ -167,7 +150,7 @@ const AddDepositModal = ({ className }: AddDepositModal) => {
   );
 };
 
-export default (props: AddDepositModal) => {
+export default (props: AddDepositModalProps) => {
   return (
     <Provider of={AddDepositModalStore}>
       <AddDepositModal {...props}></AddDepositModal>

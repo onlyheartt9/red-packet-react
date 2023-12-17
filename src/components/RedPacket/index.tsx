@@ -8,28 +8,13 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import "./style.module.scss";
+import { RedPacketType } from "@/types/intex";
+import { useAccount } from "wagmi";
 type RedPacketProps = {
-  isOpen: boolean;
-  onOpenChange: (key: boolean) => void;
+  data: RedPacketType;
 };
 
 type statusType = "Completed" | "In_Progress" | "Not_Participated";
-
-type packetType = {
-  id?: number; // id
-  startTime?: number; // 发起红包时间
-  amount?: number; // 单个红包金额
-  collectType?: string; // 红包类型
-  lock?: boolean; // 红包锁
-  currentTimes?: number; // 当前次数
-  times?: number; // 次数限制
-  limit?: number; // 限制人数
-  users?: string[]; // 当前参加的人数
-  creator?: string; // 发起人
-  currentUser?: string; // 当前需要发红包的人
-  exist?: boolean; // 是否存在
-  requestId?: number; // 随机数映射id，方便vrf回调
-};
 
 const StateComponents = ({ status }: { status: statusType }) => {
   const publicClass = {
@@ -45,7 +30,7 @@ const StateComponents = ({ status }: { status: statusType }) => {
   };
 
   const conf = Config[status];
-  
+
   return (
     <div className={publicClass.Background}>
       <div className={publicClass.Status_Ball + " " + conf.ballColor}></div>
@@ -59,7 +44,7 @@ const ContextComponent = ({
   message = {},
 }: {
   status: statusType;
-  message: packetType;
+  message: RedPacketType;
 }) => {
   return (
     <>
@@ -105,24 +90,26 @@ const ContextComponent = ({
   );
 };
 
-function RedPacket({ isOpen, onOpenChange }: RedPacketProps) {
+function RedPacket({ data }: RedPacketProps) {
   const status: statusType = "Not_Participated";
-
-  const mockData: packetType = {
-    id: 1,
-    startTime: 2131323132131,
-    amount: 8.88,
-    collectType: "usdc",
-    lock: false,
-    currentTimes: 2,
-    times: 10,
-    limit: 15,
-    users: ["0x1212323123312312313", "0x12123131323123"],
-    creator: "0x123123123123132131232",
-    currentUser: "0x666666a6a666a66a6a66",
-    exist: true,
-    requestId: 659284,
-  };
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { address: currentAddress } = useAccount();
+  const mockData = data;
+  // const mockData: RedPacketType = {
+  //   id: 1,
+  //   startTime: 2131323132131,
+  //   amount: 8.88,
+  //   collectType: "usdc",
+  //   lock: false,
+  //   currentTimes: 2,
+  //   times: 10,
+  //   limit: 15,
+  //   users: ["0x1212323123312312313", "0x12123131323123"],
+  //   creator: "0x123123123123132131232",
+  //   currentUser: "0x666666a6a666a66a6a66",
+  //   exist: true,
+  //   requestId: 659284,
+  // };
 
   const Message = [
     {
@@ -139,16 +126,28 @@ function RedPacket({ isOpen, onOpenChange }: RedPacketProps) {
     },
   ];
 
+  const onClick = () => {
+    if (mockData.users.includes(currentAddress as string)) {
+      alert("你已经参加了");
+      return;
+    }
+    onOpen();
+  };
+
   return (
     <>
       <div
         className="h-[490px] w-[330px] rounded-[60px]  bg-cover bg-center transition-all hover:scale-105 "
         style={{ backgroundImage: "url(/img/packet-bgd.png)" }}
+        onClick={() => {
+          onOpen();
+        }}
       >
         <Button
           className="h-full w-full flex flex-col bg-transparent items-start px-16 pb-40"
           disableRipple
           disableAnimation
+          onClick={onClick}
         >
           <StateComponents status={status} />
           <div className=" flex flex-col mt-14">

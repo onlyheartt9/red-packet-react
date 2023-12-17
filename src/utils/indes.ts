@@ -76,3 +76,4 @@ function useStorage(key: string, defaultValue: any, storageObject: Storage) {
 
   return [value, setValue, remove];
 }
+

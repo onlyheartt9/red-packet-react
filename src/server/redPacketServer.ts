@@ -3,16 +3,20 @@ import { dealConstractData } from "@/utils/indes";
 import { parseUnits } from "ethers";
 import { useState } from "react";
 import {
+  useContractEvent,
   useContractRead as useContractRead_wagmi,
   useContractWrite as useContractWrite_wagmi,
   useWalletClient,
 } from "wagmi";
 
-export const RED_PACKET_ADDRESS = "0xa3ae85342e3836A2d5852F45CFCfACA0C7F6E91A";
+// export const RED_PACKET_ADDRESS = "0xa3ae85342e3836A2d5852F45CFCfACA0C7F6E91A";
+// export const RED_PACKET_ADDRESS = "0x55b6E44254c82Ee44AfE66fa00c7f7Cc9da32Cd8";
+// export const RED_PACKET_ADDRESS = "0xBbD0091D48f55287604FC6A5e141878068C6c73a";
+export const RED_PACKET_ADDRESS = "0xB55476D3489B593EB9BB02E8D18c64e46b349461";
 
 // const ConversionMethod = {
 //     'Number':Number,
-//     // "RedPacket":RedPacketClass()
+//     // "RedPacket":RedPacketType()
 // }
 
 // read公共方法
@@ -42,18 +46,43 @@ export const useContractRead = ({ ...params }) => {
 // 获取当前用户押金
 export const useGetDeposit = () => {
   const { data: walletClient } = useWalletClient();
-  parseUnits;
   return useContractRead({
     address: RED_PACKET_ADDRESS,
     abi: redPacketAbi,
     functionName: "getDeposit",
     args: [],
     account: walletClient?.account,
-    valueType: "number",
+    scopeKey: "getDeposit",
+    watch: true,
+  });
+}; 
+// 获取当前用户押金
+export const useGetAllPacket = () => {
+  const { data: walletClient } = useWalletClient();
+  return useContractRead({
+    address: RED_PACKET_ADDRESS,
+    abi: redPacketAbi,
+    functionName: "getAllPackets",
+    args: [],
+    account: walletClient?.account,
+    scopeKey: "getAllPackets",
     watch: true,
   });
 };
 
+// 获取当前用户押金
+export const useGetUser = () => {
+  const { data: walletClient } = useWalletClient();
+  return useContractRead({
+    address: RED_PACKET_ADDRESS,
+    abi: redPacketAbi,
+    functionName: "getUser",
+    args: [],
+    account: walletClient?.account,
+    scopeKey: "getUser",
+    watch: true,
+  });
+};
 // 获取指定红包信息
 export const useGetPacket = () => {
   const { data: walletClient } = useWalletClient();
@@ -87,14 +116,22 @@ export const useAddDeposit = () => {
 
 // 参加红包
 export const useAttendPacket = () => {
-  return useContractWrite_wagmi({
+  const data = useContractWrite_wagmi({
     address: RED_PACKET_ADDRESS,
     abi: redPacketAbi,
     functionName: "attendPacket",
   });
+  return { ...data };
 };
 // 创建红包
-export const useCreatePacket = () => {
+export const useCreatePacket = ({ listener }) => {
+  useContractEvent({
+    address: RED_PACKET_ADDRESS,
+    abi: redPacketAbi,
+    eventName: "",
+    listener,
+    // ...params,
+  });
   return useContractWrite_wagmi({
     address: RED_PACKET_ADDRESS,
     abi: redPacketAbi,
