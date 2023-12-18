@@ -62,7 +62,7 @@ const CreatePacketModal = ({ className }: CreatePacketModalProps) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">授权</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">创建红包</ModalHeader>
               <ModalBody className="flex flex-col">
                 <div className="text-sm text-gray-500 mb-4">
                   当前押金:{currentDeposit}

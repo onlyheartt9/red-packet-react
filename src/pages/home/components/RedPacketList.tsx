@@ -4,9 +4,8 @@ import { useAttendPacket, useGetAllPacket } from "@/server/redPacketServer";
 import { RedPacketType } from "@/types/intex";
 import { Button } from "@nextui-org/react";
 
-export const RedPacketList = () => {
+const RedPacketList = () => {
   const [data] = useGetAllPacket() as [RedPacketType[]];
-  console.log(data, "useGetAllPacket");
   return (
     <div>
       <div className="mr-16 flex flex-row-reverse">
@@ -15,11 +14,12 @@ export const RedPacketList = () => {
         </Button> */}
         <CreatePacketModal></CreatePacketModal>
       </div>
-      <div>
-        {data?.map((item) => (
-          <RedPacket data={item}></RedPacket>
+      <div className="flex">
+        {data?.map((item, index) => (
+          <RedPacket key={index} data={item}></RedPacket>
         ))}
       </div>
     </div>
   );
 };
+export default RedPacketList;

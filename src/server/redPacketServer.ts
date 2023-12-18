@@ -55,7 +55,7 @@ export const useGetDeposit = () => {
     scopeKey: "getDeposit",
     watch: true,
   });
-}; 
+};
 // 获取当前用户押金
 export const useGetAllPacket = () => {
   const { data: walletClient } = useWalletClient();
@@ -115,11 +115,12 @@ export const useAddDeposit = () => {
 };
 
 // 参加红包
-export const useAttendPacket = () => {
+export const useAttendPacket = (params: any = {}) => {
   const data = useContractWrite_wagmi({
     address: RED_PACKET_ADDRESS,
     abi: redPacketAbi,
     functionName: "attendPacket",
+    ...params,
   });
   return { ...data };
 };

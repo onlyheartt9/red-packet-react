@@ -1,7 +1,7 @@
 import { useAccount, useConnect, useNetwork } from "wagmi";
 import { useGetDeposit } from "@/server/redPacketServer";
-import { Banner } from "./components/Banner";
-import { RedPacketList } from "./components/RedPacketList";
+import Banner from "./components/Banner";
+import RedPacketList from "./components/RedPacketList";
 
 export default function Home() {
   const aaa = useAccount({
@@ -18,6 +18,7 @@ export default function Home() {
     <div className="flex flex-col">
       <Banner className="mb-4"></Banner>
       <RedPacketList></RedPacketList>
+      {/* <Carousel images={images}></Carousel> */}
     </div>
   );
 }

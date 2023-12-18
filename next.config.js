@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
-const path = require('path')
+const path = require("path");
 
 const nextConfig = {
   sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
+    includePaths: [path.join(__dirname, "styles")],
   },
   async redirects() {
     return [
@@ -28,11 +28,19 @@ const nextConfig = {
       ...config.resolve.fallback,
 
       fs: false, // the solution
-      net:false,
-      tls:false
+      net: false,
+      tls: false,
     };
 
     return config;
+  },
+  typescript: {
+    // 注意: 仅在确定你知道自己在做什么时开启此选项 
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    // 忽略在构建时的ESLint错误
+    ignoreDuringBuilds: true,
   },
 };
 

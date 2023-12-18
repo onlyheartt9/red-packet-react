@@ -45,7 +45,7 @@ const useOk = ({ value, ref }) => {
   return { onOk };
 };
 
-const AddDepositModal = ({ className }: AddDepositModalProps) => {
+const InnerAddDepositModal = ({ className }: AddDepositModalProps) => {
   const {
     value,
     setValue,
@@ -149,11 +149,12 @@ const AddDepositModal = ({ className }: AddDepositModalProps) => {
     </>
   );
 };
-
-export default (props: AddDepositModalProps) => {
+const AddDepositModal = (props: AddDepositModalProps) => {
   return (
     <Provider of={AddDepositModalStore}>
-      <AddDepositModal {...props}></AddDepositModal>
+      <InnerAddDepositModal {...props}></InnerAddDepositModal>
     </Provider>
   );
 };
+
+export default AddDepositModal;

@@ -1,3 +1,6 @@
+// 红包状态
+export type statusType = "Completed" | "In_Progress" | "Not_Participated";
+
 export type RedPacketType = {
   id: number; // id
   startTime: number; // 发起红包时间
@@ -12,6 +15,9 @@ export type RedPacketType = {
   currentUser: string; // 当前需要发红包的人
   exist: boolean; // 是否存在
   requestId: number; // 随机数映射id，方便vrf回调
+};
+
+export type UserType = {
 };
 
 export type ClassProps = {

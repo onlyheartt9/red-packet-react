@@ -44,32 +44,35 @@ const useInvalid = ({ value, first, validate }) => {
   return { errorMessage, isInvalid, validateFunc };
 };
 
-const VaildInput = React.forwardRef(
-  ({ value, validate, onChange, ...otherProps }: VaildInputProps, ref) => {
-    const first = useFirst(value);
-    const { errorMessage, isInvalid, validateFunc } = useInvalid({
-      value,
-      first,
-      validate,
-    });
-    useImperativeHandle(
-      ref,
-      () => ({
-        validate: validateFunc,
-      }),
-      [validate]
-    );
-    return (
-      <Input
-        isInvalid={isInvalid}
-        errorMessage={isInvalid && errorMessage}
-        value={value}
-        onChange={onChange}
-        // 其他的参数设置
-        {...otherProps}
-      />
-    );
-  }
-);
+const InnerVaildInput = (
+  { value, validate, onChange, ...otherProps }: VaildInputProps,
+  ref
+) => {
+  const first = useFirst(value);
+  const { errorMessage, isInvalid, validateFunc } = useInvalid({
+    value,
+    first,
+    validate,
+  });
+  useImperativeHandle(
+    ref,
+    () => ({
+      validate: validateFunc,
+    }),
+    [validate]
+  );
+  return (
+    <Input
+      isInvalid={isInvalid}
+      errorMessage={isInvalid && errorMessage}
+      value={value}
+      onChange={onChange}
+      // 其他的参数设置
+      {...otherProps}
+    />
+  );
+};
+
+const VaildInput = React.forwardRef(InnerVaildInput);
 
 export default VaildInput;

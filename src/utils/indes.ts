@@ -1,9 +1,10 @@
+import { RedPacketType, statusType } from "@/types/intex";
 import { useCallback, useState, useEffect } from "react";
 
 // 处理通过合约获取的数据的值
 export const dealConstractData = (data: any): any => {
   if (typeof data === "bigint") {
-    return Number(data);
+    return data.toString();
   } else if (data instanceof Array) {
     return data?.map((item: any) => dealConstractData(item));
   } else if (data instanceof Object) {
@@ -40,15 +41,15 @@ export const getStorage = (key: string) => {
 };
 
 export function useLocalStorage(key: string, defaultValue: any) {
-  if(typeof window === "undefined"){
-    return []
+  if (typeof window === "undefined") {
+    return [];
   }
   return useStorage(key, defaultValue, window?.localStorage ?? {});
 }
 
 export function useSessionStorage(key: string, defaultValue: any) {
-  if(typeof window === "undefined"){
-    return []
+  if (typeof window === "undefined") {
+    return [];
   }
   return useStorage(key, defaultValue, window?.sessionStorage ?? {});
 }
@@ -77,3 +78,23 @@ function useStorage(key: string, defaultValue: any, storageObject: Storage) {
   return [value, setValue, remove];
 }
 
+export const getPacketType: (packet: RedPacketType) => statusType = (
+  packet: RedPacketType
+) => {
+  // 未参加的红包
+  if (packet.users.length !== packet.limit) {
+    return "Not_Participated";
+  }
+
+  // 正在红包中
+  if (packet.currentTimes > 0 && packet.currentTimes < packet.limit) {
+    return "In_Progress";
+  }
+
+  // 正在红包中
+  if (packet.currentTimes === packet.limit) {
+    return "Completed";
+  }
+
+  return "Not_Participated";
+};

@@ -6,46 +6,76 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Chip,
 } from "@nextui-org/react";
 import "./style.module.scss";
-import { RedPacketType } from "@/types/intex";
+import { RedPacketType, statusType } from "@/types/intex";
 import { useAccount } from "wagmi";
+import { useAttendPacket, useGetDeposit } from "@/server/redPacketServer";
+import { getPacketType } from "@/utils/indes";
+import { useMemo } from "react";
+import { ethers } from "ethers";
 type RedPacketProps = {
   data: RedPacketType;
 };
 
-type statusType = "Completed" | "In_Progress" | "Not_Participated";
+const Config = {
+  Completed: { ballColor: "bg-[#FFE0B3]", text: "已完成" },
+  In_Progress: { ballColor: "bg-[#25FE15]", text: "进行中" },
+  Not_Participated: { ballColor: "bg-[#2CA6FF]", text: "未开始" },
+};
 
-const StateComponents = ({ status }: { status: statusType }) => {
+const StateComponents = ({
+  status,
+  isIn,
+}: {
+  status: statusType;
+  isIn: boolean;
+}) => {
   const publicClass = {
-    Background: "w-20 p-1 px-2  bg-zinc-100/40 rounded-full flex flex-row",
-    Status_Ball: "w-2 h-2 self-center rounded-full",
-    Text: "basis-3/4 text-white/50 h-4 align-middle font-normal",
-  };
-
-  const Config = {
-    Completed: { ballColor: "bg-[#FFE0B3]", text: "已完成" },
-    In_Progress: { ballColor: "bg-[#25FE15]", text: "进行中" },
-    Not_Participated: { ballColor: "bg-[#2CA6FF]", text: "未参与" },
+    Background: "p-1 px-2  bg-zinc-100/40 rounded-full flex flex-row",
+    Text: "text-[#FFE0B3]",
   };
 
   const conf = Config[status];
 
   return (
-    <div className={publicClass.Background}>
-      <div className={publicClass.Status_Ball + " " + conf.ballColor}></div>
-      <div className={publicClass.Text}>{conf.text}</div>
-    </div>
+    <Chip
+      variant="dot"
+      className={publicClass.Text}
+      classNames={{
+        base:
+          publicClass.Background +
+          "bg-gradient-to-br from-indigo-500 to-pink-500 border-small border-white/50 shadow-pink-500/30",
+        content: "drop-shadow shadow-black text-white",
+        dot: conf.ballColor,
+      }}
+    >
+      {conf.text}
+      {isIn && "(已参与)"}
+    </Chip>
   );
 };
 
 const ContextComponent = ({
   status,
-  message = {},
+  data,
 }: {
   status: statusType;
-  message: RedPacketType;
+  data: RedPacketType;
 }) => {
+  const [deposit] = useGetDeposit();
+  const { write } = useAttendPacket();
+  const onClick = (onClose: () => void) => {
+    if (deposit < data?.amount * 10) {
+      alert("押金不够，请充值后再操作！");
+      return;
+    }
+    // ethers.to
+    write({
+      args: [ethers.toBigInt(data?.id)],
+    });
+  };
   return (
     <>
       {status === "Not_Participated" && (
@@ -54,10 +84,16 @@ const ContextComponent = ({
             <>
               <ModalHeader>您未参与这个红包活动</ModalHeader>
               <ModalBody>
-                <p>点击'参与活动'按钮，即可参与新一轮抢红包活动🎉！</p>
+                <p>点击"参与活动"按钮，即可参与新一轮抢红包活动🎉！</p>
               </ModalBody>
               <ModalFooter>
-                <Button className="bg-[#FE3F21] text-white" onPress={onClose}>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  取消
+                </Button>
+                <Button
+                  className="bg-[#FE3F21] text-white"
+                  onPress={() => onClick(onClose)}
+                >
                   参与活动
                 </Button>
               </ModalFooter>
@@ -72,14 +108,14 @@ const ContextComponent = ({
               <ModalHeader>红包详情</ModalHeader>
               <ModalBody>
                 <p>
-                  开始时间:{" "}
-                  {message?.startTime
-                    ? new Date(message?.startTime).toLocaleString()
+                  创建时间:{" "}
+                  {data?.startTime
+                    ? new Date(data?.startTime).toLocaleString()
                     : "Not Data"}
                 </p>
-                <p>红包金额: {message?.amount ?? 0}</p>
-                <p>代币类型：{message?.collectType ?? ""}</p>
-                <p>发起人： {message?.creator ?? "none"}</p>
+                <p>红包金额: {data?.amount ?? 0}</p>
+                <p>代币类型：{data?.collectType ?? ""}</p>
+                <p>发起人： {data?.creator ?? "none"}</p>
               </ModalBody>
               <ModalFooter></ModalFooter>
             </>
@@ -90,50 +126,83 @@ const ContextComponent = ({
   );
 };
 
+const MessageContent = ({
+  status,
+  data,
+}: {
+  status: statusType;
+  data: RedPacketType;
+}) => {
+  if (typeof window !== "undefined") {
+    window.eee = ethers;
+    window.ddd = data;
+  }
+
+  return (
+    <>
+      {status === "Not_Participated" && (
+        <>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            单个红包金额 : {data.amount}
+          </p>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            参与人数 : {data.users.length}/{data.limit}
+          </p>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            红包次数 : {data.times}
+          </p>
+        </>
+      )}
+      {status === "In_Progress" && (
+        <>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            单个红包金额 : {data.amount}
+          </p>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            参与人数 : {data.users.length}/{data.limit}
+          </p>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            当前红包轮次 : {data.currentTimes}
+          </p>
+        </>
+      )}
+      {status === "Completed" && (
+        <>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            单个红包金额 : {data.amount}
+          </p>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            参与人数 : {data.users.length}/{data.limit}
+          </p>
+          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+            红包次数 : {data.times}
+          </p>
+        </>
+      )}
+    </>
+  );
+};
+
 function RedPacket({ data }: RedPacketProps) {
-  const status: statusType = "Not_Participated";
+  const status = getPacketType(data);
+  const [deposit] = useGetDeposit();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { address: currentAddress } = useAccount();
-  const mockData = data;
-  // const mockData: RedPacketType = {
-  //   id: 1,
-  //   startTime: 2131323132131,
-  //   amount: 8.88,
-  //   collectType: "usdc",
-  //   lock: false,
-  //   currentTimes: 2,
-  //   times: 10,
-  //   limit: 15,
-  //   users: ["0x1212323123312312313", "0x12123131323123"],
-  //   creator: "0x123123123123132131232",
-  //   currentUser: "0x666666a6a666a66a6a66",
-  //   exist: true,
-  //   requestId: 659284,
-  // };
-
-  const Message = [
-    {
-      id: 1,
-      title: "参与次数",
-      current: mockData?.currentTimes,
-      total: mockData?.times,
-    },
-    {
-      id: 2,
-      title: "参与人数",
-      current: mockData?.users?.length,
-      total: mockData?.limit,
-    },
-  ];
+  const isIn = useMemo(() => {
+    return data.users.includes(currentAddress as string);
+  }, [currentAddress, data.users.length]);
 
   const onClick = () => {
-    if (mockData.users.includes(currentAddress as string)) {
+    if (isIn) {
       alert("你已经参加了");
+      return;
+    }
+    if (deposit < data.amount * 10) {
+      alert("押金不足");
       return;
     }
     onOpen();
   };
-
   return (
     <>
       <div
@@ -144,25 +213,18 @@ function RedPacket({ data }: RedPacketProps) {
         }}
       >
         <Button
-          className="h-full w-full flex flex-col bg-transparent items-start px-16 pb-40"
+          className="h-full w-full flex flex-col justify-start pt-18 bg-transparent items-start  px-16 pb-44"
           disableRipple
           disableAnimation
           onClick={onClick}
         >
-          <StateComponents status={status} />
-          <div className=" flex flex-col mt-14">
-            {Message.map((item) => (
-              <p
-                className="my-2 text-[#FFE0B3] text-lg font-bold"
-                key={item.id}
-              >
-                {item.title} : {item.current}/{item.total}
-              </p>
-            ))}
+          <StateComponents isIn={isIn} status={status} />
+          <div className=" flex flex-col flex-1 justify-center items-center">
+            <MessageContent status={status} data={data}></MessageContent>
           </div>
         </Button>
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-          <ContextComponent status={status} message={mockData} />
+          <ContextComponent status={status} data={data} />
         </Modal>
       </div>
     </>

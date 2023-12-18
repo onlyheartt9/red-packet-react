@@ -1,4 +1,4 @@
-export const Banner = ({ className }) => {
+ const Banner = ({ className }) => {
   return (
     <div className={`flex flex-col items-center text-white ${className}`}>
       <div className="text-8xl mb-4">RED-PAKECT</div>
@@ -7,3 +7,4 @@ export const Banner = ({ className }) => {
     </div>
   );
 };
+export default Banner
