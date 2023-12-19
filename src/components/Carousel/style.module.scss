@@ -1,34 +1,28 @@
 .carousel {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  width: (268.55 * 3)+ (16 * 2px) !important;
+  overflow-x: auto;
+  padding: 20px;
+}
+@media (max-width: 1000px) {
+  .carousel {
+    width: (268.55 * 3)+ (16 * 3px) !important;
+    > div {
+      margin-right: 16px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
-  
-  .carousel img {
-    max-width: 100%;
-    height: auto;
+}
+
+@media (min-width: 1000px) {
+  .carousel {
+    width: (268 * 4)+ (16 * 4px) !important;
+    > div {
+      margin-right: 16px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
-  
-  .prev-button,
-  .next-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    font-size: 24px;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .prev-button {
-    left: 10px;
-  }
-  
-  .next-button {
-    right: 10px;
-  }
+}

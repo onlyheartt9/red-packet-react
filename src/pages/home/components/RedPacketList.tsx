@@ -1,3 +1,4 @@
+import Carousel from "@/components/Carousel";
 import CreatePacketModal from "@/components/Modal/CreatePacketModal";
 import RedPacket from "@/components/RedPacket";
 import { useAttendPacket, useGetAllPacket } from "@/server/redPacketServer";
@@ -14,10 +15,8 @@ const RedPacketList = () => {
         </Button> */}
         <CreatePacketModal></CreatePacketModal>
       </div>
-      <div className="flex">
-        {data?.map((item, index) => (
-          <RedPacket key={index} data={item}></RedPacket>
-        ))}
+      <div className="flex row justify-center">
+        <Carousel data={data}></Carousel>
       </div>
     </div>
   );

@@ -15,6 +15,8 @@ import { useAttendPacket, useGetDeposit } from "@/server/redPacketServer";
 import { getPacketType } from "@/utils/indes";
 import { useMemo } from "react";
 import { ethers } from "ethers";
+import { useStore } from "reto";
+import { GlobalStore } from "@/store/global.store";
 type RedPacketProps = {
   data: RedPacketType;
 };
@@ -184,6 +186,7 @@ const MessageContent = ({
 };
 
 function RedPacket({ data }: RedPacketProps) {
+  const {isConnected} = useStore(GlobalStore)
   const status = getPacketType(data);
   const [deposit] = useGetDeposit();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -201,6 +204,10 @@ function RedPacket({ data }: RedPacketProps) {
       alert("押金不足");
       return;
     }
+    if(!isConnected){
+      alert('请先登录钱包！');
+      return;
+    }
     onOpen();
   };
   return (
@@ -208,9 +215,9 @@ function RedPacket({ data }: RedPacketProps) {
       <div
         className="h-[490px] w-[330px] rounded-[60px]  bg-cover bg-center transition-all hover:scale-105 "
         style={{ backgroundImage: "url(/img/packet-bgd.png)" }}
-        onClick={() => {
-          onOpen();
-        }}
+        // onClick={() => {
+        //   onOpen();
+        // }}
       >
         <Button
           className="h-full w-full flex flex-col justify-start pt-18 bg-transparent items-start  px-16 pb-44"
