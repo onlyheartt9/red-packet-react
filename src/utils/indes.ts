@@ -1,3 +1,4 @@
+import { PACKET_STATUS } from "@/contants/packetStatus";
 import { RedPacketType, statusType } from "@/types/intex";
 import { useCallback, useState, useEffect } from "react";
 
@@ -83,18 +84,18 @@ export const getPacketType: (packet: RedPacketType) => statusType = (
 ) => {
   // 未参加的红包
   if (packet.users.length !== packet.limit) {
-    return "Not_Participated";
+    return PACKET_STATUS.Not_Participated;
   }
 
   // 正在红包中
   if (packet.currentTimes > 0 && packet.currentTimes < packet.limit) {
-    return "In_Progress";
+    return PACKET_STATUS.In_Progress;
   }
 
   // 正在红包中
   if (packet.currentTimes === packet.limit) {
-    return "Completed";
+    return PACKET_STATUS.Completed;
   }
 
-  return "Not_Participated";
+  return PACKET_STATUS.Not_Participated;
 };

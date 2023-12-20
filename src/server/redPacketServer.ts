@@ -70,7 +70,7 @@ export const useGetAllPacket = () => {
   });
 };
 
-// 获取当前用户押金
+// 获取当前用户信息
 export const useGetUser = () => {
   const { data: walletClient } = useWalletClient();
   return useContractRead({
@@ -96,12 +96,12 @@ export const useGetPacket = () => {
 };
 
 // 获取所有红包信息
-export const useGetPackets = () => {
+export const useGetPackets = ({ packetIds = [] }: { packetIds: string[] }) => {
   return useContractRead({
     address: RED_PACKET_ADDRESS,
     abi: redPacketAbi,
     functionName: "getPackets",
-    args: [],
+    args: [packetIds],
   });
 };
 

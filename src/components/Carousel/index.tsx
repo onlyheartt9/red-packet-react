@@ -44,7 +44,8 @@ const scrollNextFn = (scrollableContent, direction) => {
   // }
 };
 
-const Carousel = ({ data, className }: CarouselProps) => {
+const Carousel = React.memo(({ data = [], className }: CarouselProps) => {
+  console.log(9999999999, data);
   const ref = useRef<any>();
   const [isScroll, setIsScroll] = useState(false);
 
@@ -89,9 +90,10 @@ const Carousel = ({ data, className }: CarouselProps) => {
           !isScroll ? "justify-center" : ""
         }`}
       >
-        {data?.map((item, index) => (
-          <RedPacket key={index} data={item}></RedPacket>
-        ))}
+        {data.length > 0 &&
+          data?.map((item, index) => (
+            <RedPacket key={index} data={item}></RedPacket>
+          ))}
       </div>
       {isScroll && (
         <ArrowBtn
@@ -102,6 +104,6 @@ const Carousel = ({ data, className }: CarouselProps) => {
       )}
     </div>
   );
-};
+});
 
 export default Carousel;

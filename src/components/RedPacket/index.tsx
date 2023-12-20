@@ -17,14 +17,18 @@ import { useMemo } from "react";
 import { ethers } from "ethers";
 import { useStore } from "reto";
 import { GlobalStore } from "@/store/global.store";
+import { PACKET_STATUS } from "@/contants/packetStatus";
 type RedPacketProps = {
   data: RedPacketType;
 };
 
 const Config = {
-  Completed: { ballColor: "bg-[#FFE0B3]", text: "已完成" },
-  In_Progress: { ballColor: "bg-[#25FE15]", text: "进行中" },
-  Not_Participated: { ballColor: "bg-[#2CA6FF]", text: "未开始" },
+  [PACKET_STATUS.Completed]: { ballColor: "bg-[#FFE0B3]", text: "已完成" },
+  [PACKET_STATUS.In_Progress]: { ballColor: "bg-[#25FE15]", text: "进行中" },
+  [PACKET_STATUS.Not_Participated]: {
+    ballColor: "bg-[#2CA6FF]",
+    text: "未开始",
+  },
 };
 
 const StateComponents = ({
@@ -80,7 +84,7 @@ const ContextComponent = ({
   };
   return (
     <>
-      {status === "Not_Participated" && (
+      {status === PACKET_STATUS.Not_Participated && (
         <ModalContent>
           {(onClose) => (
             <>
@@ -103,7 +107,7 @@ const ContextComponent = ({
           )}
         </ModalContent>
       )}
-      {status !== "Not_Participated" && (
+      {status !== PACKET_STATUS.Not_Participated && (
         <ModalContent>
           {(onClose) => (
             <>
@@ -142,7 +146,7 @@ const MessageContent = ({
 
   return (
     <>
-      {status === "Not_Participated" && (
+      {status === PACKET_STATUS.Not_Participated && (
         <>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
             单个红包金额 : {data.amount}
@@ -155,7 +159,7 @@ const MessageContent = ({
           </p>
         </>
       )}
-      {status === "In_Progress" && (
+      {status === PACKET_STATUS.In_Progress && (
         <>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
             单个红包金额 : {data.amount}
@@ -168,7 +172,7 @@ const MessageContent = ({
           </p>
         </>
       )}
-      {status === "Completed" && (
+      {status === PACKET_STATUS.Completed && (
         <>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
             单个红包金额 : {data.amount}
@@ -186,7 +190,7 @@ const MessageContent = ({
 };
 
 function RedPacket({ data }: RedPacketProps) {
-  const {isConnected} = useStore(GlobalStore)
+  const { isConnected } = useStore(GlobalStore);
   const status = getPacketType(data);
   const [deposit] = useGetDeposit();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -204,8 +208,8 @@ function RedPacket({ data }: RedPacketProps) {
       alert("押金不足");
       return;
     }
-    if(!isConnected){
-      alert('请先登录钱包！');
+    if (!isConnected) {
+      alert("请先登录钱包！");
       return;
     }
     onOpen();

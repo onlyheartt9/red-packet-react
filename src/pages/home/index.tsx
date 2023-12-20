@@ -12,13 +12,12 @@ export default function Home() {
   const bbb = useConnect();
   const ccc = useNetwork();
   const ddd = useGetDeposit();
-  console.log(aaa, bbb, ccc);
-  console.log(ddd);
+  // console.log(aaa, bbb, ccc);
+  // console.log(ddd);
   return (
     <div className="flex flex-col">
       <Banner className="mb-4"></Banner>
       <RedPacketList></RedPacketList>
-      {/* <Carousel images={images}></Carousel> */}
     </div>
   );
 }
