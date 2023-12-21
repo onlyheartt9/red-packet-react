@@ -9,7 +9,6 @@ export const useNotLogin = () => {
     router.push(to);
   };
   useEffect(() => {
-    console.log('isConnected',isConnected)
     if (!isConnected) {
       jumpUrl("/home");
     }

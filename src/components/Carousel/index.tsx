@@ -45,7 +45,6 @@ const scrollNextFn = (scrollableContent, direction) => {
 };
 
 const Carousel = React.memo(({ data = [], className }: CarouselProps) => {
-  console.log(9999999999, data);
   const ref = useRef<any>();
   const [isScroll, setIsScroll] = useState(false);
 
