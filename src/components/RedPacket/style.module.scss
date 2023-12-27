@@ -1,8 +1,3 @@
 .red_packet_button {
-    background-image: url("../../public/img/packet-bgd.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
-    background-color: #FD3C01;
+  @apply h-full w-full flex flex-col justify-start bg-transparent items-start;
 }
-

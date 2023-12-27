@@ -5,6 +5,7 @@
 }
 @media (max-width: 1000px) {
   .carousel {
+    box-sizing: content-box;
     width: (268.55 * 3)+ (16 * 3px) !important;
     > div {
       margin-right: 16px;
@@ -17,6 +18,7 @@
 
 @media (min-width: 1000px) {
   .carousel {
+    box-sizing: content-box;
     width: (268 * 4)+ (16 * 4px) !important;
     > div {
       margin-right: 16px;

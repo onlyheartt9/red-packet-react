@@ -99,3 +99,14 @@ export const getPacketType: (packet: RedPacketType) => statusType = (
 
   return PACKET_STATUS.Not_Participated;
 };
+
+export function truncateString(str: string, maxLength: number = 6) {
+  if (str.length <= maxLength) {
+    return str; // 字符串长度小于等于 maxLength，无需截断
+  }
+
+  const head = str.slice(0, maxLength / 2);
+  const tail = str.slice(-maxLength / 2);
+
+  return head + "..." + tail;
+}

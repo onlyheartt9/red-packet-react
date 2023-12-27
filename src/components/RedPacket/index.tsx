@@ -7,12 +7,13 @@ import {
   Button,
   useDisclosure,
   Chip,
+  Tooltip,
 } from "@nextui-org/react";
 import "./style.module.scss";
 import { RedPacketType, statusType } from "@/types/intex";
 import { useAccount } from "wagmi";
 import { useAttendPacket, useGetDeposit } from "@/server/redPacketServer";
-import { getPacketType } from "@/utils/indes";
+import { getPacketType, truncateString } from "@/utils/indes";
 import { useMemo } from "react";
 import { ethers } from "ethers";
 import { useStore } from "reto";
@@ -143,14 +144,21 @@ const MessageContent = ({
     window.eee = ethers;
     window.ddd = data;
   }
-
+  const amount = ethers.formatUnits(data.amount, 18);
   return (
     <>
       {status === PACKET_STATUS.Not_Participated && (
         <>
-          <p className="my-2 text-[#FFE0B3] text-lg font-bold">
-            单个红包金额 : {data.amount}
-          </p>
+          <Tooltip
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            content={`${amount}link`}
+          >
+            <p className="my-2 text-[#FFE0B3] text-lg font-bold">
+              单个红包金额 : {truncateString(amount)}
+            </p>
+          </Tooltip>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
             参与人数 : {data.users.length}/{data.limit}
           </p>
@@ -217,20 +225,20 @@ function RedPacket({ data }: RedPacketProps) {
   return (
     <>
       <div
-        className="h-[490px] w-[330px] rounded-[60px]  bg-cover bg-center transition-all hover:scale-105 "
+        className="flex h-[490px] w-[330px] rounded-[60px]  bg-cover bg-center transition-all hover:scale-105 justify-center"
         style={{ backgroundImage: "url(/img/packet-bgd.png)" }}
         // onClick={() => {
         //   onOpen();
         // }}
       >
         <Button
-          className="h-full w-full flex flex-col justify-start pt-18 bg-transparent items-start  px-16 pb-44"
+          className="h-full w-[200px] flex flex-col justify-start pt-18 bg-transparent items-start px-0 pb-44"
           disableRipple
           disableAnimation
           onClick={onClick}
         >
           <StateComponents isIn={isIn} status={status} />
-          <div className=" flex flex-col flex-1 justify-center items-center">
+          <div className="w-full flex flex-col flex-1 justify-center items-center">
             <MessageContent status={status} data={data}></MessageContent>
           </div>
         </Button>

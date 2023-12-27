@@ -1,6 +1,7 @@
 import { useFirst } from "@/utils/hooks/useFirst";
 import { noop } from "@/utils/noop";
 import { Input, type InputProps } from "@nextui-org/react";
+import { ethers } from "ethers";
 import React, { useEffect, useImperativeHandle } from "react";
 import { useState } from "react";
 
@@ -9,6 +10,7 @@ type VaildInputProps =
       value?: any;
       onChange?: (val: any) => void;
       validate?: (val: any) => any;
+      description?: string;
     }
   | InputProps;
 
@@ -45,7 +47,7 @@ const useInvalid = ({ value, first, validate }) => {
 };
 
 const InnerVaildInput = (
-  { value, validate, onChange, ...otherProps }: VaildInputProps,
+  { value, validate, onChange, description='', ...otherProps }: VaildInputProps,
   ref
 ) => {
   const first = useFirst(value);
@@ -69,6 +71,11 @@ const InnerVaildInput = (
       onChange={onChange}
       // 其他的参数设置
       {...otherProps}
+      description={
+        value > 0
+          ? `${ethers.formatUnits(value, 18)}  link ${description}`
+          : description
+      }
     />
   );
 };

@@ -4,6 +4,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import AddDepositModal from "./Modal/AddDepositModal";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
+import { ethers } from "ethers";
 
 function Layout({ children }) {
   const { isConnected } = useAccount();
@@ -12,6 +13,7 @@ function Layout({ children }) {
   const jumpUrl = (to: string) => {
     router.push(to);
   };
+  const deposit = ethers.formatUnits(data??'0', 18);
 
   return (
     <div className="dark">
@@ -25,14 +27,14 @@ function Layout({ children }) {
 
         {/* 放置全局头部内容 */}
         <div className="flex text-white items-center">
-          <Chip className="mr-4">当前押金：{data}</Chip>
+          <Chip className="mr-4">当前押金：{deposit}</Chip>
           <AddDepositModal className="mr-4"></AddDepositModal>
           <Button
             // isDisabled={isConnected}
             className="mr-4"
             onPress={() => {
-              if(!isConnected){
-                alert('未登录钱包！')
+              if (!isConnected) {
+                alert("未登录钱包！");
               }
               jumpUrl("/personal");
             }}

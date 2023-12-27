@@ -84,7 +84,7 @@ const InnerAddDepositModal = ({ className }: AddDepositModalProps) => {
                     <VaildInput
                       ref={ref}
                       type="number"
-                      label="Price"
+                      label="押金"
                       min={0}
                       size="lg"
                       placeholder="0.00"
