@@ -1,9 +1,6 @@
 export const redPacketAbi = [
   {
     inputs: [
-      { internalType: "uint64", name: "_subscriptionId", type: "uint64" },
-      { internalType: "address", name: "_subscriptionAddr", type: "address" },
-      { internalType: "bytes32", name: "_keyHash", type: "bytes32" },
       { internalType: "address", name: "_tokenAddress", type: "address" },
     ],
     stateMutability: "nonpayable",
@@ -53,14 +50,6 @@ export const redPacketAbi = [
   {
     inputs: [{ internalType: "string", name: "", type: "string" }],
     name: "NO_USER",
-    type: "error",
-  },
-  {
-    inputs: [
-      { internalType: "address", name: "have", type: "address" },
-      { internalType: "address", name: "want", type: "address" },
-    ],
-    name: "OnlyCoordinatorCanFulfill",
     type: "error",
   },
   {
@@ -242,6 +231,16 @@ export const redPacketAbi = [
     type: "function",
   },
   {
+    inputs: [
+      { internalType: "uint256", name: "_packetId", type: "uint256" },
+      { internalType: "uint256[]", name: "_randomWords", type: "uint256[]" },
+    ],
+    name: "continuePacket",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "contractBalance",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
@@ -373,16 +372,6 @@ export const redPacketAbi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "_requestId", type: "uint256" }],
-    name: "getRequestStatus",
-    outputs: [
-      { internalType: "bool", name: "fulfilled", type: "bool" },
-      { internalType: "uint256[]", name: "randomWords", type: "uint256[]" },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "getUser",
     outputs: [
@@ -427,40 +416,6 @@ export const redPacketAbi = [
       { internalType: "bool", name: "exist", type: "bool" },
       { internalType: "uint256", name: "requestId", type: "uint256" },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      { internalType: "uint256", name: "requestId", type: "uint256" },
-      { internalType: "uint256[]", name: "randomWords", type: "uint256[]" },
-    ],
-    name: "rawFulfillRandomWords",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint32", name: "numWords", type: "uint32" }],
-    name: "requestRandomWords",
-    outputs: [{ internalType: "uint256", name: "requestId", type: "uint256" }],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    name: "s_requests",
-    outputs: [
-      { internalType: "bool", name: "fulfilled", type: "bool" },
-      { internalType: "bool", name: "exists", type: "bool" },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "s_subscriptionId",
-    outputs: [{ internalType: "uint64", name: "", type: "uint64" }],
     stateMutability: "view",
     type: "function",
   },

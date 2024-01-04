@@ -37,18 +37,21 @@ const CreatePacketModal = ({ className }: CreatePacketModalProps) => {
   const countRef = useRef();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [currentDeposit] = useGetDeposit();
-  const max = currentDeposit / 10;
+
+  const depost = ethers?.formatUnits(currentDeposit?.toString()??0, 18);
+  const max = depost / 10;
   const { write } = useCreatePacket({ listener: () => {} });
 
   const onClick = () => {
     write({
       args: [
-        ethers.toBigInt(value?.amount),
+        ethers.parseUnits(value?.amount.toString(),18),
         "LINK",
         ethers.toBigInt(value?.limit),
         ethers.toBigInt(value?.times),
       ],
     });
+    onOpen();
   };
   return (
     <>
@@ -62,18 +65,20 @@ const CreatePacketModal = ({ className }: CreatePacketModalProps) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">创建红包</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                创建红包
+              </ModalHeader>
               <ModalBody className="flex flex-col">
                 <div className="text-sm text-gray-500 mb-4">
-                  当前押金:{currentDeposit}
+                  当前押金:{depost}
                 </div>
                 <VaildInput
                   ref={countRef}
                   type="number"
                   label="单个红包金额"
-                  min={0}
+                  min={0.1}
                   size="lg"
-                  placeholder="0.00"
+                  placeholder="0.1"
                   max={max}
                   description={`单个红包金额最高位为${max}`}
                   labelPlacement="outside"

@@ -82,6 +82,7 @@ const ContextComponent = ({
     write({
       args: [ethers.toBigInt(data?.id)],
     });
+    onClose();
   };
   return (
     <>
@@ -120,7 +121,7 @@ const ContextComponent = ({
                     ? new Date(data?.startTime).toLocaleString()
                     : "Not Data"}
                 </p>
-                <p>红包金额: {data?.amount ?? 0}</p>
+                <p>红包金额: {ethers.formatUnits(data.amount, 18) ?? 0}</p>
                 <p>代币类型：{data?.collectType ?? ""}</p>
                 <p>发起人： {data?.creator ?? "none"}</p>
               </ModalBody>
@@ -140,10 +141,7 @@ const MessageContent = ({
   status: statusType;
   data: RedPacketType;
 }) => {
-  if (typeof window !== "undefined") {
-    window.eee = ethers;
-    window.ddd = data;
-  }
+  
   const amount = ethers.formatUnits(data.amount, 18);
   return (
     <>
@@ -170,7 +168,7 @@ const MessageContent = ({
       {status === PACKET_STATUS.In_Progress && (
         <>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
-            单个红包金额 : {data.amount}
+            单个红包金额 :  {truncateString(amount)}
           </p>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
             参与人数 : {data.users.length}/{data.limit}
@@ -183,7 +181,7 @@ const MessageContent = ({
       {status === PACKET_STATUS.Completed && (
         <>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
-            单个红包金额 : {data.amount}
+            单个红包金额 :  {truncateString(amount)}
           </p>
           <p className="my-2 text-[#FFE0B3] text-lg font-bold">
             参与人数 : {data.users.length}/{data.limit}

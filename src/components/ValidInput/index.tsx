@@ -73,7 +73,7 @@ const InnerVaildInput = (
       {...otherProps}
       description={
         value > 0
-          ? `${ethers.formatUnits(value, 18)}  link ${description}`
+          ? `${value}  link ${description}`
           : description
       }
     />

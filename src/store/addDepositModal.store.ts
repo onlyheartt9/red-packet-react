@@ -34,7 +34,7 @@ export const AddDepositModalStore = () => {
   });
   const onAddDeposit = () => {
     write({
-      args: [ethers.toBigInt(value)],
+      args: [ethers.parseUnits(value.toString(),18)],
     });
   };
   return {

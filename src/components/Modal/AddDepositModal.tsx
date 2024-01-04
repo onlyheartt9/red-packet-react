@@ -34,7 +34,7 @@ const useOk = ({ value, ref }) => {
       return;
     }
     writeApprove({
-      args: [RED_PACKET_ADDRESS, ethers.toBigInt(value)],
+      args: [RED_PACKET_ADDRESS, ethers.parseUnits(value.toString(),18)],
     });
   };
 

@@ -14,7 +14,10 @@ function Layout({ children }) {
     router.push(to);
   };
   const deposit = ethers.formatUnits(data??'0', 18);
-
+  if (typeof window !== "undefined") {
+    window.eee = ethers;
+    window.ddd = data;
+  }
   return (
     <div className="dark">
       <header className="flex justify-between mx-8 mb-4 px-8 py-12">
